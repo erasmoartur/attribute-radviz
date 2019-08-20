@@ -51,3 +51,24 @@ As a consequence of the current capabilities of collecting and storing data, a d
 * _(u)_ Search attributes by name
 * _(s)_ Refresh the second view
 * _(t)_ Search items by name
+
+
+### The interactivity
+
+* You can freely manipulate the DAs in both views.
+
+* By hovering the pointer over DAs in the attribute view, the correlation data between attributes and the current DA-label is encoded in element sizes, returning to regular sizes when removing the pointer. 
+
+* Correlation information between a particular attribute and all data labels is exposed by hovering the pointer over this attribute inside the attribute view. This information arises from arcs of DAs, information bars and influence lines.
+
+* You can remove label values by dragging out DAs. Thus, the correlation matrix will be recalculated containing only the remaining label values. This mechanism is particularly useful when users notice some already segregated label value (observing the second view); hence, you could remove this label to focus on interesting attributes of the remaining label values.
+
+* If you want to select a large number of attributes, you can use two distinct multi-selection mechanisms. The first one is the bounding box, which allows multiple selections inside the unit circle. The second is the multi-select click, where you right-click on a DA-label and the $P$ strongest correlated attributes (not yet selected) are included. The $P$ value is defined in the control panel.
+
+* To start the second view, you must choose an attribute in the right panel  to identify the items. 
+
+* You can choose the visualization method between RadViz and t-SNE. Selecting RadViz, when hovering the pointer over the elements, arcs and information bars expose the actual data values of the selected item proportionally. 
+
+* By hovering the pointer over DAs, the values of the attribute represented by that DA encodes new sizes of elements in the projection. It is possible to do this also by hovering over attributes in the attribute view, providing coordination between views during analysis. This could give the user a sense of how each attribute affects the labels and items. 
+
+* Every attribute selected in the attribute view or in the list of attributes is added to the second view. 
