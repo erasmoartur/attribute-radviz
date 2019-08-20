@@ -25,4 +25,10 @@ As a consequence of the current capabilities of collecting and storing data, a d
 
 ![alt text](https://raw.githubusercontent.com/erasmoartur/attribute-radviz/master/imgs/screen_interface.png?raw=true)
 
-* (a) teste
+* (a) File opener
+* (b) Target attribute selection
+* (c) Define the number of top correlated attributes simultaneously selected when right-clicking over a dimensional anchor
+* (d) Adjust the size of the elements
+* (e) Adjust the opacity of the elements
+* (f) Adjust the strength of RadViz links
+* (g) Adjust the repelling force of the elements (to avoid overlapping)
