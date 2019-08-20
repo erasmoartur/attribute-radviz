@@ -21,7 +21,7 @@ As a consequence of the current capabilities of collecting and storing data, a d
 * Starting the second view:
   * Go to _Right Panel->Instance identifier_ and choose an attribute to label the instances inside the view
   
-## The interface
+### The interface
 
 ![alt text](https://raw.githubusercontent.com/erasmoartur/attribute-radviz/master/imgs/screen_interface.png?raw=true)
 
@@ -32,3 +32,12 @@ As a consequence of the current capabilities of collecting and storing data, a d
 * _(e)_ Adjust the opacity of the elements
 * _(f)_ Adjust the strength of RadViz links
 * _(g)_ Adjust the repelling force of the elements (to avoid overlapping)
+* _(h)_ Enable/disable visual widgets of the tool (can increase performance)
+* _(i)_ Choose the visualization technique for the second view
+* _(j)_ Choose an identifier to name the elements in the second view 
+* _(k)_ Choose the bound box action in the second view:
+  * Show values: Show a table with all values of the selected items
+  * Refine: Rebuilds the correlation matrix with only the selected items
+* _(l)_ Restart the view
+* _(m)_ Enable/disable auto ordering and auto-align
+* _(n)_ Define the sample size for the view 
