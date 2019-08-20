@@ -22,3 +22,5 @@ As a consequence of the current capabilities of collecting and storing data, a d
   * Go to _Right Panel->Instance identifier_ and choose an attribute to label the instances inside the view
   
 ## The interface
+
+* (a) teste
