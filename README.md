@@ -23,4 +23,6 @@ As a consequence of the current capabilities of collecting and storing data, a d
   
 ## The interface
 
+![alt text](https://raw.githubusercontent.com/erasmoartur/attribute-radviz/master/imgs/screen_interface.png?raw=true)
+
 * (a) teste
