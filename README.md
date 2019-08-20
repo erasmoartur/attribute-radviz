@@ -41,3 +41,13 @@ As a consequence of the current capabilities of collecting and storing data, a d
 * _(l)_ Restart the view
 * _(m)_ Enable/disable auto ordering and auto-align
 * _(n)_ Define the sample size for the view 
+* _(o)_ Define the options to export the current selection
+* _(p)_ Define the t-SNE parameters
+* _(q)_ Enable/disable the bars in the second view
+* _(r)_ Show the silhouette values for:
+  * Original data
+  * Selected data
+  * Selected and projected (RadViz) data
+* _(u)_ Search attributes by name
+* _(s)_ Refresh the second view
+* _(t)_ Search items by name
