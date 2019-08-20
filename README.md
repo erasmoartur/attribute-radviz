@@ -4,8 +4,8 @@ As a consequence of the current capabilities of collecting and storing data, a d
 
 ## Authors:
 
-Erasmo Artur da Silva Júnior (USP)
-Rosane Minghim (USP)
+   Erasmo Artur da Silva Júnior (USP)
+   Rosane Minghim (USP)
 
 ## Installing and running
 
