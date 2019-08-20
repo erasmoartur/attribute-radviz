@@ -15,5 +15,6 @@ As a consequence of the current capabilities of collecting and storing data, a d
 
 ## Getting started
 
-* Opening a csv file:
-  * Teste
+* Rendering the first view:
+  * Go to _Left panel->CSV File->Choose_ file to pick a CSV file.
+  * Then choose a target attribute from Left panel->Target Attribute.
