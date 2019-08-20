@@ -63,7 +63,7 @@ As a consequence of the current capabilities of collecting and storing data, a d
 
 * You can remove label values by dragging out DAs. Thus, the correlation matrix will be recalculated containing only the remaining label values. This mechanism is particularly useful when users notice some already segregated label value (observing the second view); hence, you could remove this label to focus on interesting attributes of the remaining label values.
 
-* If you want to select a large number of attributes, you can use two distinct multi-selection mechanisms. The first one is the bounding box, which allows multiple selections inside the unit circle. The second is the multi-select click, where you right-click on a DA-label and the $P$ strongest correlated attributes (not yet selected) are included. The $P$ value is defined in the control panel.
+* If you want to select a large number of attributes, you can use two distinct multi-selection mechanisms. The first one is the bounding box, which allows multiple selections inside the unit circle. The second is the multi-select click, where you right-click on a DA-label and the _P_ strongest correlated attributes (not yet selected) are included. The _P_ value is defined in the control panel.
 
 * To start the second view, you must choose an attribute in the right panel  to identify the items. 
 
