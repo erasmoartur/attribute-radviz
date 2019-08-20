@@ -27,8 +27,8 @@ As a consequence of the current capabilities of collecting and storing data, a d
 
 * _(a)_ File opener
 * _(b)_ Target attribute selection
-* (c) Define the number of top correlated attributes simultaneously selected when right-clicking over a DA
-* (d) Adjust the size of the elements
-* (e) Adjust the opacity of the elements
-* (f) Adjust the strength of RadViz links
-* (g) Adjust the repelling force of the elements (to avoid overlapping)
+* _(c)_ Define the number of top correlated attributes simultaneously selected when right-clicking over a DA
+* _(d)_ Adjust the size of the elements
+* _(e)_ Adjust the opacity of the elements
+* _(f)_ Adjust the strength of RadViz links
+* _(g)_ Adjust the repelling force of the elements (to avoid overlapping)
