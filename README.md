@@ -16,4 +16,4 @@ As a consequence of the current capabilities of collecting and storing data, a d
 ## Getting started
 
 * Opening a csv file:
-** Teste
++ Teste
