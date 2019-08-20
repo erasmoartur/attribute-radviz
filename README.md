@@ -11,3 +11,9 @@ As a consequence of the current capabilities of collecting and storing data, a d
 
 * Download this project and unzip in a local directory
 * Open the HTML file in a browser (tested in Chrome, Firefox, and Edge)
+
+
+## Getting started
+
+* Opening a csv file:
+** Teste
