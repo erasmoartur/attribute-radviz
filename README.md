@@ -80,14 +80,14 @@ We have included three sample data sets that can help you to get started within 
 * [Zoo data set](https://archive.ics.uci.edu/ml/datasets/zoo)
   * Content: Animal characteristics
   * 18 attributes; 101 items
-  * Suggested target attribute: class_type
+  * Suggested target attribute: _class_type_
 
 * [Corel Images](https://ieeexplore.ieee.org/document/1227984)
   * Content: Extracted image features
   * 150 attributes; 1000 items
-  * Suggested target attribute: category
+  * Suggested target attribute: _category_
   
 * News-23 data set
   * Content: RSS News Feeds
   * 3731 attributes; 1771 items
-  * Suggested target attribute: class
+  * Suggested target attribute: _class_
