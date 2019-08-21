@@ -91,3 +91,6 @@ We have included three sample data sets that can help you to get started within 
   * Content: RSS News Feeds
   * 3731 attributes; 1771 items
   * Suggested target attribute: _class_
+
+## Get in touch
+Erasmo Artur - erasmoartur@usp.br
