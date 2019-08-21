@@ -78,9 +78,16 @@ As a consequence of the current capabilities of collecting and storing data, a d
 We have included three sample data sets that can help you to get started within the tool. Feel free to analyze and select attributes until you be able to play with your own data sets. The data sets are:
 
 * [Zoo data set](https://archive.ics.uci.edu/ml/datasets/zoo)
+  * Content: Animal characteristics
   * 18 attributes; 101 items
   * Suggested target attribute: class_type
 
 * [Corel Images](https://ieeexplore.ieee.org/document/1227984)
+  * Content: Extracted image features
   * 150 attributes; 1000 items
   * Suggested target attribute: category
+  
+* News-23 data set
+  * Content: RSS News Feeds
+  * 3731 attributes; 1771 items
+  * Suggested target attribute: class
