@@ -72,3 +72,6 @@ As a consequence of the current capabilities of collecting and storing data, a d
 * By hovering the pointer over DAs, the values of the attribute represented by that DA encodes new sizes of elements in the projection. It is possible to do this also by hovering over attributes in the attribute view, providing coordination between views during analysis. This could give the user a sense of how each attribute affects the labels and items. 
 
 * Every attribute selected in the attribute view or in the list of attributes is added to the second view. 
+
+### Sample data sets
+
