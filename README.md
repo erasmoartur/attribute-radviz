@@ -80,3 +80,7 @@ We have included three sample data sets that can help you to get started within 
 * [Zoo data set](https://archive.ics.uci.edu/ml/datasets/zoo)
   * 18 attributes; 101 items
   * Suggested target attribute: class_type
+
+* [Corel Images](https://ieeexplore.ieee.org/document/1227984)
+  * 150 attributes; 1000 items
+  * Suggested target attribute: category
