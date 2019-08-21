@@ -75,3 +75,4 @@ As a consequence of the current capabilities of collecting and storing data, a d
 
 ### Sample data sets
 
+We have included three sample data sets that can help you to get started within the tool. Feel free to analyze and select attributes until you be able to play with your own data sets. The data sets are:
