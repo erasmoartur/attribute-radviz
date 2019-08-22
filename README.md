@@ -52,6 +52,19 @@ As a consequence of the current capabilities of collecting and storing data, a d
 * _(s)_ Refresh the second view
 * _(t)_ Search items by name
 
+### Visual elements
+
+![alt text](https://raw.githubusercontent.com/erasmoartur/attribute-radviz/master/imgs/screen_widgets.png?raw=true)
+
+
+* _(a)_ File opener
+* _(b)_ Target attribute selection
+* _(c)_ Define the number of top correlated attributes simultaneously selected when right-clicking over a DA
+* _(d)_ Adjust the size of the elements
+* _(e)_ Adjust the opacity of the elements
+* _(f)_ Adjust the strength of RadViz links
+* _(g)_ Adjust the repelling force of the elements (to avoid overlapping)
+* _(h)_ Enable/disable visual widgets of the tool (can increase performance)
 
 ### The interactivity
 
