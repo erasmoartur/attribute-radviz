@@ -57,14 +57,14 @@ As a consequence of the current capabilities of collecting and storing data, a d
 ![alt text](https://raw.githubusercontent.com/erasmoartur/attribute-radviz/master/imgs/screen_widgets.png?raw=true)
 
 
-* _(a)_ File opener
-* _(b)_ Target attribute selection
-* _(c)_ Define the number of top correlated attributes simultaneously selected when right-clicking over a DA
-* _(d)_ Adjust the size of the elements
-* _(e)_ Adjust the opacity of the elements
-* _(f)_ Adjust the strength of RadViz links
-* _(g)_ Adjust the repelling force of the elements (to avoid overlapping)
-* _(h)_ Enable/disable visual widgets of the tool (can increase performance)
+* _(a)_ Mapped attributes; their size and position are indicative of correlation levels with labels
+* _(b)_ Mapped items in a classic RadViz conpecpt
+* _(c)_ Dimensional anchor of the attribute view
+* _(d)_ Correlation set of the last hovered attribute
+* _(e)_ Attribute rank of the last hovered dimensional anchor (label)
+* _(f)_ Values of the last hovered item (hover over them to see the precise value)
+* _(g)_ Legend of label values
+* _(h)_ Dimensional anchor of the item view
 
 ### The interactivity
 
