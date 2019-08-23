@@ -1,0 +1,39 @@
+var tooltipComponent = function(tooltipNode) {
+
+    var root = d3.select(tooltipNode)
+        .styles({
+            position: 'absolute',
+            'pointer-events': 'none'
+        });
+
+    var setText = function(html) {
+        root.html(html);
+        return this;
+    };
+    var position = function(x, y) {
+        root.styles({
+            left: x + 'px',
+            top: y + 'px'
+        });
+        return this;
+    };
+    var show = function() {
+        root.styles({
+            display: 'block'
+        });
+        return this;
+    };
+    var hide = function() {
+        root.styles({
+            display: 'none'
+        });
+        return this;
+    };
+
+    return {
+        setText: setText,
+        setPosition: position,
+        show: show,
+        hide: hide
+    };
+};
