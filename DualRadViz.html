@@ -1,0 +1,1747 @@
+﻿<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Subspaces Explorer</title>
+    <script src="./files/d3.v4.min.js"></script>
+	<script src="./files/d3-selection-multi.v0.4.min.js"></script>
+	<script src="./files/d3.layout.cloud.js"></script>
+    <script src="./files/component-utils.js"></script>
+    <script src="./files/tooltip-component.js"></script>
+    <script src="./files/radviz-regular.js"></script>
+    <script src="./files/radviz-component.js"></script>
+	<script src='./files/tsne.js'></script>
+	<script src='./files/tsne-component.js'></script>
+	<script src="./files/jquery-1.8.2.js"></script>
+	<script src="./files/jquery-ui.js"></script>
+	<script src="./files/jquery.csv.js"></script>
+	<script src="./files/pearson-correlation.js"></script>
+    <link rel="stylesheet" type="text/css" href="./files/style.css">
+</head>
+<body id="body">
+	<div id="radvizdiv" class="radviz">
+		<input type="button" class="button" id="atSearch" value="Search" style="width: 66px;position:absolute;left:1%;bottom:10px;">
+		<div class="container"></div>		
+	</div>
+	<div class="regularRadviz">
+		<input type="button" class="button" id="radRefresh" value="Refresh" style="width: 66px;position:absolute;right:80px;bottom:5px;">
+		<input type="button" class="button" id="itSearch" value="Search" style="width: 66px;position:absolute;right:1%;bottom:5px;">
+		<div class="containerRegular"></div>		
+	</div>	
+	<div id='divtsne' class="tsne">	
+		<input type="button" class="button" id="tsneRefresh" value="Refresh" style="width: 66px;position:absolute;right:1%;bottom:5px;">
+		<div class="containerTSNE"></div>
+	</div>	
+	<div id="iconbar">
+		<img src="./interface/menubar01.png" style="height:264px;"/>
+	<div class="input">
+	<fieldset id="openfile1" style="width:170px;height:38px; float: left;">
+		<legend>CSV file:</legend>
+		<input type="file" id="files" style="width:90%;font-size:10px;" name="files[]"/>
+	</fieldset>	
+	<fieldset id="openfile2" style="width:170px; height:38px;float: left;">
+		<legend>Target attribute:</legend>
+		<form id="labelIndex">
+		<select name="atrs" id="selattr" style="width:90%;font-size:10px;">
+			<option>Atributos</option>
+		</select>
+		</form>
+	</fieldset>
+		<fieldset style="width:170px; height:38px;float: left;">
+		<legend>Multiselect:</legend>
+		Step: <input id="multistep" type="number" value="5" style="width:30px;">
+			
+		</form>
+		</fieldset>			
+		<fieldset style="width:170px;height:38px;float: left;">		
+		<legend>Element size:</legend>
+			<div class="slider">
+				<input type="range" name="price-min" id="resize" value="15" min="1" max="50" style="width:150px;">
+			</div>
+		</fieldset>
+		<fieldset style="width:170px;height:38px;float: left;">		
+		<legend>Opacity:</legend>
+			<div class="slider">
+				<input type="range" name="transparencySlider" id="trans" value="80" min="1" max="100" style="width:150px;">
+			</div>
+		</fieldset>
+		<fieldset style="width:170px;height:38px;float:left;">		
+		<legend>Link strength:</legend>
+			<div class="slider">
+				<input type="range" name="strengthSlider" id="strengthSlr" value="1" min="0.5" max="3" step="0.1" style="width:150px;">
+			</div>
+		</fieldset>
+		<fieldset style="width:170px;height:38px;float:left;">		
+		<legend>Force(collide):</legend>
+			<div class="slider">
+				<input type="range" name="collisionSlider" id="collision" value="0" min="0" max="1" step="0.01" style="width:150px;">
+			</div>
+		</fieldset>
+		<fieldset style="width:170px;height:85px;float: left;">
+		<legend>Enable/Disable:</legend>
+			<form action="" id="ibars">
+			<input type="checkbox" name="ibars1" value="1" checked>Informations bars<br>
+			</form>
+			<form action="" id="nborder">
+			<input type="checkbox" name="nborder1" value="1" checked>Border of nodes<br>
+			</form>
+			<form action="" id="dlinks">
+			<input type="checkbox" name="linksd" value="1" checked>Links lines (next rendering)<br>
+			</form>
+			<form action="" id="wcloud">
+			<input type="checkbox" name="wordcl" value="1">Word Cloud<br>
+			</form>
+		</fieldset>	
+		<fieldset style="width:170px;height:40px;float:left;">
+		<legend>Categorical mechanism:</legend>
+			<form action="" id="selectcormode" style="line-height:0.5em;margin-top:-0.5em">
+			<input type="radio" name="selectMode" value="0" checked>Binary vectors<br>
+			<input type="radio" name="selectMode" value="1">RSS minimization<br>
+			</form>
+		</fieldset>		
+	</div>	
+	</div>
+	<div id="iconbar2">	
+			<img src="./interface/menubar02.png" style="height:352px;"/>
+	<div class="input2">
+		<fieldset style="width:170px; height:38px;float: left;">	
+			<legend>Visualization:</legend>
+			<form action="" id="visKind">
+			  <input type="radio" name="visualization" value="tsne" > t-SNE
+			  <input type="radio" name="visualization" value="radviz" checked> RadViz
+			</form>
+		</fieldset>	
+		<fieldset id="setlab" style="width:170px; height:38px;float: left;">	
+			<legend>Instance Identifier:</legend>
+			<form id="instId">
+			<select name="ids" id="selIdt" style="width:90%;font-size:10px;">
+				<option>Instance ID</option>
+			</select>
+			</form>
+		</fieldset>	
+		<fieldset style="width:90px;height:38px;float:left;">
+		<legend>Bounding box:</legend>
+			<form action="" id="selectmode_r" style="line-height:0.5em;margin-top:-0.5em">
+			<input type="radio" name="selectMode" value="0" checked>Show values<br>
+			<input type="radio" name="selectMode" value="1">Refine<br>
+			</form>
+		</fieldset>
+		<fieldset style="width:50px; height:38px;float:left;">
+		<legend>Extra:</legend>
+			<input type="button" id="btclear" value="Clear" style="width: 50px;">
+		</fieldset>
+		<fieldset style="width:74px;height:38px;float:left;">
+			<legend>DAs:</legend>
+			<form action="" id="autoalign_r" style="line-height:0.5em;margin-top:-0.5em">
+			<input type="checkbox" id="autoa" value="1" checked>Auto align<br>
+			<input type="checkbox" id="autos" value="1" checked>Auto sort<br>
+			</form>
+		</fieldset>
+		<fieldset style="width:74px; height:38px;float: left;">	
+			<legend>Sampling:</legend>
+			<input id="p_elementsnumber" type="number" value="500" style="width:65px;">
+		</fieldset>
+		<fieldset style="width:170px; height:50px;float:left;">
+		<legend>Export sel:</legend>
+			<input type="button" id="expCSV" value=".csv" style="width: 50px;">
+			<input type="button" id="expDAT" value=".dat" style="width: 50px;">
+			<form action="" id="expSize">
+			  <input type="radio" name="expMode" value="all" checked> All items
+			  <input type="radio" name="expMode" value="sampled"> Sampled
+			</form>
+		</fieldset>
+		<fieldset style="width:170px;height:38px;float: left;">		
+		<legend>Element size:</legend>
+			<div class="slider">
+				<input type="range" name="esize" id="resize_r" value="10" min="0" max="60" style="width:150px;">
+			</div>
+		</fieldset>
+		<fieldset style="width:170px;height:38px;float:left;">		
+		<legend>Opacity:</legend>
+			<div class="slider">
+				<input type="range" name="transparencySlider" id="trans_r" value="80" min="1" max="100" style="width:150px;">
+			</div>
+		</fieldset>
+		<fieldset style="width:170px;height:38px;float:left;">		
+		<legend>Link strength:</legend>
+			<div class="slider">
+				<input type="range" name="strengthSlider_r" id="strengthSlr_r" value="1" min="0.5" max="5" step="0.1" style="width:150px;">
+			</div>
+		</fieldset>
+		<fieldset style="width:170px;height:38px;float:left;">		
+		<legend>Force(collide):</legend>
+			<div class="slider">
+				<input type="range" name="collisionSlider" id="collision_r" value="1" min="0" max="1" step="0.01" style="width:150px;">
+			</div>
+		</fieldset>	
+		<fieldset style="width:170px; height:38px;float: left;">	
+		<legend>t-SNE parameters:</legend>
+			Perplexity:<input id="tsnePerplexity" type="number" value="30" style="width:32px;">
+			Epsilon:<input id="tsneEpsilon" type="number" value="10" style="width:32px;">
+		</fieldset>
+		<fieldset style="width:65px;height:45px;float:left;">
+		<legend>Info Bars:</legend>
+			<form action="" id="ibars_r">
+			<input type="checkbox" name="ibars2" value="1" checked>Enable<br>
+			</form>
+		</fieldset>
+		<fieldset style="width:80px;height:45px;float:left;">
+		<legend>Silhouette:</legend>
+			<form action="" id="normalizedata" style="line-height:0.5em;margin-top:-0.5em">
+			<input type="checkbox" name="normForm" value="1" checked>Normalize<br>
+			</form>
+			<input type="button" id="silhouette" value="Compute" style="width:70px;">
+		</fieldset>
+	</div>
+	</div>
+	<div class="attribSearch" style="visibility:hidden;">
+			<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for attributes.." style="width:96%;font-size:10px;">
+			<ul id="myUL">
+			</ul>
+			<input type="button" id="atSearchClose" value="Close" style="width: 100%;">
+	</div>
+	<div class="itemSearch" style="visibility:hidden;">
+			<input type="text" id="myInput2" onkeyup="myFunction2()" placeholder="Search for items.." style="width:96%;font-size:10px;">
+			<ul id="myUL2">
+
+			</ul>
+			<input type="button" id="itSearchClose" value="Close" style="width: 100%;">
+	</div>
+	<div id="upperBar" class="upperBar">
+		<h1>Interactive Tool for Enhanced Attribute Analysis and Selection</h1>
+	</div>
+	<div id="texttooltip" class="texttooltip"></div>
+	<div id="black" class="black"></div>
+	<div id="loading" class="loading">
+		<img src="./interface/processing.gif" align="left" style="height:52px;position:relative;top:10px;left:5px;"/>
+		<img src="./interface/processing_text.png" align="left" style="height:22px;position:relative;top:25px;left:5px;"/>
+	</div>
+	<div id="sampleQuery" class="sampleQuery">
+		<p style=" font: 15px arial, sans-serif;text-align: center;margin-top:0px;margin-bottom:0px">Samples</p>
+		<table id='sampleTable' class="table-1">
+			<tr id='tableStates'></tr>
+		</table>
+		<input type="button" class="button" id="queryClose" value="Close" style="width: 66px;position:fixed;right:7%;bottom:2%;">
+	</div>
+	
+	
+    <script>
+
+	//======================== Never learned how to code in javascript, so take it easy ============================================\\ 	
+	//============================================ Global variables	================================================================\\ 	
+	//============================================ 					================================================================\\ 	
+	var vis = 1;
+	var colorScale = [];
+	var colors = [];
+	var recursionIns = false;
+	var sampleChange = true;
+	var filterAttrs = true;
+	var randomStore = [];
+	var flagScreen = 0;
+	var data;
+	var tData;
+	var sampling = [];
+	var tDataExport;
+	var dimensions;
+	var radvizData;
+	var labelSet;
+	var labelOut = [];
+	var regularData;
+	var targetAttr;
+	var instIdent;
+	var arrayData;
+	var alldim;
+	var fullDimList;
+	var seldim;
+	var idAttr;
+	var lbIndex;
+	var partElemNumber = 500;
+	var resize_ratio = 1;
+	var forceStrength = 1;
+	var forceCollide = 0;
+	var attRadDotSize = 20;
+	var radviz;
+	var regularRadviz;
+	var tsneVisualization;
+	var firstRun = true;
+	var autoalign = true;
+	var autosort = true;
+	var sortLabel = false;
+	var normalizeDT = true;
+	var drawLinks = true;
+	var dataCopy;
+	var cloudLayout;
+	var svg;
+	var showCloud = false;
+	var binarizationMode = true;
+	var sDims = [];
+	var wordScale = d3.scaleLinear().domain([0, 1]).range([5, 20, 80, 160]).clamp(true);
+	var wordColor = d3.scaleLinear().range(['#858c6e', '#09ba2c']);
+
+	//============================================					================================================================\\ 	
+	//============================================ File Management	================================================================\\ 	
+	//============================================ 					================================================================\\ 	
+
+	$(document).ready(function() {
+		if (isAPIAvailable()) {
+			$('#files').bind('change', handleFileSelect);
+		}
+	});
+
+	function handleFileSelect(evt) {
+		var files = evt.target.files; // FileList object
+		var file = files[0];
+		printTable(file);
+	}
+
+	function printTable(file) {
+		var reader = new FileReader();
+		reader.readAsText(file);
+		reader.onload = function(event) {
+			var csv = event.target.result;
+			data = $.csv.toArrays(csv);
+			dimensions = data[0]; // Storing dimensions labels
+			data.splice(0, 1); // Cutting data (only values now)
+
+			if (dimensions.length > 500)
+				alert("The data set has more than 500 attributes; we recommend disabling the links drawing in the attribute view panel for better performance");
+
+			for (var i = 0; i < data.length; i++) { // Test if the matrix is dense or sparse
+				if (data[i].length != dimensions.length) {
+					data = sparseToDense(data);
+					break;
+				}
+			}
+			updateList(dimensions);
+			regularData = data;
+		}
+	}
+
+
+	function isAPIAvailable() {
+		if (window.File && window.FileReader && window.FileList && window.Blob) {
+			return true;
+		} else {
+			document.writeln('The HTML5 APIs used in this form are only available in the following browsers:<br />');
+			document.writeln(' - Google Chrome: 13.0 or later<br />');
+			document.writeln(' - Mozilla Firefox: 6.0 or later<br />');
+			document.writeln(' - Internet Explorer: Not supported (partial support expected in 10.0)<br />');
+			document.writeln(' - Safari: Not supported<br />');
+			document.writeln(' - Opera: Not supported');
+			return false;
+		}
+	}
+
+	function sparseToDense(data) { // Convert a sparse matrix in a dense matrix
+		var newdata = [];
+
+		for (var i = 0; i < data.length; i++) {
+			newdata[i] = new Array(dimensions.length + 1).fill(0); // All values equals zero
+			newdata[i][0] = data[i][0];
+			newdata[i][dimensions.length + 1] = data[i][data[i].length - 1];
+			for (var j = 1; j < data[i].length - 1; j++)
+				newdata[i][+data[i][j].slice(0, data[i][j].search(":")) + 1] = +data[i][j].slice(data[i][j].search(":") + 1, data[i][j].length);
+		}
+		dimensions.splice(0, 0, "Identifier");
+		dimensions.push("Class");
+		return newdata;
+	}
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+			vars[key] = value;
+		});
+		return vars;
+	}
+
+	function recursion() {
+		var keys = getUrlVars();
+
+		if (keys['recursion'] == 'true') {
+			var passParameters = JSON.parse(localStorage.getItem("parPass"));
+			dimensions = JSON.parse(localStorage.getItem("dimPass"));
+			data = JSON.parse(localStorage.getItem("dataPass"));
+
+			targetAttr = passParameters[0];
+			instIdent = passParameters[1];
+			updateList(dimensions);
+			regularData = data;
+			//restoring parameters
+			document.getElementById("selattr").selectedIndex = targetAttr + 1;
+			document.getElementById("idlist").selectedIndex = instIdent + 1;
+			forceStrength = passParameters[2];
+			forceCollide = passParameters[3];
+			attRadDotSize = passParameters[4];
+			showCloud = passParameters[5];
+			drawLinks = passParameters[6];
+
+			loadingScreenOn(); //loading screen on
+
+			document.getElementById("openfile1").disabled = true;
+
+			updateIdList(instIdent);
+			vis ? regularRadviz = 1 : tsneVisualization = 1;
+			loadingScreenOn();
+			flagScreen = 3;
+
+			document.getElementById("setlab").disabled = true;
+			recursionIns = true;
+
+		}
+	}
+
+	// Recursion used by the pruning 
+	recursion();
+
+	//============================================					================================================================\\ 	
+	//============================================		Utils		================================================================\\ 	
+	//============================================					================================================================\\ 	
+
+	function balanceCounter(labels) {
+		var result = [];
+		var sum = 0;
+		for (i = 0; i < labels.length; i++) {
+			result[i] = 0;
+			for (j = 0; j < labels[i].length; j++)
+				result[i] += labels[i][j];
+			sum += result[i];
+		}
+		for (i = 0; i < labels.length; i++)
+			result[i] = result[i] / sum;
+		return result;
+
+	}
+
+	function binarize(num, val) {
+		if (num == val)
+			return 1;
+		else
+			return 0;
+	};
+
+	function toObject(data, keys, labelnames, size) {
+		var i = 0,
+			k = 0,
+			obj = null,
+			output = [];
+
+		for (i = 0; i < data.length; i++) {
+			obj = {};
+			obj['elemSize'] = size[i];
+			obj['Name'] = labelnames[i];
+			obj['id'] = i;
+
+			for (k = 0; k < keys.length; k++) {
+
+				obj[keys[k]] = data[i][k];
+			}
+			output.push(obj);
+		}
+		return output;
+	}
+
+	var contains = function(needle) {
+		// Per spec, the way to identify NaN is that it is not equal to itself
+		var findNaN = needle !== needle;
+		var indexOf;
+		if (!findNaN && typeof Array.prototype.indexOf === 'function') {
+			indexOf = Array.prototype.indexOf;
+		} else {
+			indexOf = function(needle) {
+				var i = -1,
+					index = -1;
+
+				for (i = 0; i < this.length; i++) {
+					var item = this[i];
+
+					if ((findNaN && item !== item) || item === needle) {
+						index = i;
+						break;
+					}
+				}
+				return index;
+			};
+		}
+		return indexOf.call(this, needle) > -1;
+	};
+
+	transpose = function(a) {
+		var w = a.length ? a.length : 0, // Calculate the width and height of the Array
+			h = a[0] instanceof Array ? a[0].length : 0;
+
+		if (h === 0 || w === 0) {
+			return [];
+		} // In case it is a zero matrix, no transpose routine needed.
+
+		var i, j, t = [];
+		for (i = 0; i < h; i++) { // Loop through every item in the outer array (height)
+			t[i] = []; // Insert a new row (array)
+
+			for (j = 0; j < w; j++) { // Loop through every item per item in outer array (width)
+				t[i][j] = a[j][i]; // Save transposed data.
+			}
+		}
+		return t;
+	};
+
+	function eucDistance(a, b) {
+		return a
+			.map((x, i) => Math.abs(x - b[i]) ** 2) // square the difference
+			.reduce((sum, now) => sum + now) // sum
+			**
+			(1 / 2)
+	};
+
+	Array.prototype.max = function() {
+		return Math.max.apply(null, this);
+	};
+
+	Array.prototype.min = function() {
+		return Math.min.apply(null, this);
+	};
+
+	const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
+
+	function correlation(data_, p1, p2) { // Function to calc correlation with categorical values or not
+
+		var data = [];
+		data[0] = data_[p1].slice();
+		data[1] = data_[p2].slice();
+		p1 = 0;
+		p2 = 1;
+		var p1Categorical = data[p1].some(isNaN);
+		var p2Categorical = data[p2].some(isNaN);
+		var _data = [];
+
+		if (p1Categorical && p2Categorical) { // Transforming the first in random numbers and throw in next case
+			var uniquesP2 = data[p2].filter((v, i, a) => a.indexOf(v) === i);
+			_data[1] = [];
+			for (var j = 0; j < uniquesP2.length; j++) {
+				for (var i = 0; i < data[p2].length; i++) {
+					if (uniquesP2[j] == data[p2][i])
+						_data[1][i] = j;
+				}
+			}
+			p2Categorical = !p2Categorical;
+			data[p2] = _data[1];
+		}
+		if (!p1Categorical && p2Categorical) { // Just switching both and throwing in next case
+			var aux = p1;
+			p1 = p2;
+			p2 = aux;
+			p1Categorical = !p1Categorical;
+			p2Categorical = !p2Categorical;
+		}
+		if (p1Categorical && !p2Categorical) {
+			var sum, n, penalty;
+			var avg = [];
+			penalty = 0;
+			var uniques = data[p1].filter((v, i, a) => a.indexOf(v) === i);
+			for (var j = 0; j < uniques.length; j++) {
+				sum = 0;
+				n = 0;
+				for (var i = 0; i < data[p1].length; i++)
+					if (uniques[j] == data[p1][i]) {
+						sum += +data[p2][i];
+						n++;
+					}
+				if (contains.call(avg, sum / n)) // Penalty if the average is already present
+					penalty += n / data[p1].length;
+				avg[j] = sum / n;
+			}
+			_data[0] = [];
+
+			for (var j = 0; j < uniques.length; j++) {
+				for (var i = 0; i < data[p1].length; i++)
+					if (uniques[j] == data[p1][i]) _data[0][i] = avg[j];
+			}
+
+			_data[1] = data[p2];
+			var result_c = getPearsonCorrelation(_data[0], _data[1]);
+			if (result_c > penalty)
+				return result_c - penalty;
+			else
+				return 0;
+		}
+		if (!p1Categorical && !p2Categorical) {
+			_data[0] = data[p1];
+			_data[1] = data[p2];
+		}
+		return getPearsonCorrelation(_data[0], _data[1]);
+	}
+
+	function normalize_array(arr) {
+
+		normalize = function(val, max, min) {
+			return (val - min) / (max - min);
+		}
+
+		max = Math.max.apply(null, arr)
+		min = Math.min.apply(null, arr)
+
+		hold_normed_values = []
+		arr.forEach(function(this_num) {
+			hold_normed_values.push(normalize(this_num, max, min))
+		})
+
+		return (hold_normed_values)
+
+	}
+
+	//============================================					================================================================\\ 	
+	//============================================	  HTML Stuff	================================================================\\ 	
+	//============================================					================================================================\\ 	
+
+	function loadingScreenOn() {
+		document.getElementById("black").style.visibility = "visible";
+		document.getElementById("black").style.opacity = 0.7;
+		document.getElementById("loading").style.visibility = "visible";
+		document.getElementById("loading").style.opacity = 1;
+		document.getElementById("loading").style.height = '70px';
+		document.getElementById("loading").style.top = '40vh';
+	}
+
+	function loadingScreenOff() {
+		document.getElementById("black").style.opacity = 0;
+		document.getElementById("black").style.visibility = "hidden";
+		document.getElementById("loading").style.height = '0px';
+		document.getElementById("loading").style.opacity = 0;
+		document.getElementById("loading").style.visibility = "hidden";
+	}
+
+	function syncForms() { //Sync the checked html elements
+		document.getElementById("visKind")[0].checked = false;
+		document.getElementById("visKind")[1].checked = true;
+		document.getElementById("expSize")[0].checked = true;
+		document.getElementById("expSize")[1].checked = false;
+	}
+
+	function queryTheseSamples(indexList) {
+
+		var html_ = '';
+		var table = document.getElementById("sampleTable");
+		table.innerHTML = "<tbody><tr id='tableStates'></tr></tbody>";
+
+		document.getElementById("black").style.visibility = "visible";
+		document.getElementById("black").style.opacity = 0.7;
+		document.getElementById("sampleQuery").style.visibility = "visible";
+		document.getElementById("sampleQuery").style.opacity = 1;
+		document.getElementById("sampleQuery").style.height = '90%';
+
+		for (var i = 0; i < fullDimList.length; i++)
+			html_ += '<td>' + fullDimList[i] + '</td>';
+
+		table.insertRow(table.rows.length).innerHTML = html_; //filling the attributes name
+
+		html_ = '';
+
+		for (var j = 0; j < indexList.length; j++) { //filling the samples
+			for (var i = 0; i < fullDimList.length; i++)
+				html_ += '<td>' + data[indexList[j]][i] + '</td>';
+
+			table.insertRow(table.rows.length).innerHTML = html_;
+			html_ = '';
+		}
+	}
+
+	function myFunction() { // search engine stuff
+		var input, filter, ul, li, a, i;
+		input = document.getElementById("myInput");
+		filter = input.value.toUpperCase();
+		ul = document.getElementById("myUL");
+		li = ul.getElementsByTagName("li");
+		for (i = 0; i < li.length; i++) {
+			a = li[i].getElementsByTagName("a")[0];
+			if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+			} else {
+				li[i].style.display = "none";
+
+			}
+		}
+	}
+
+	function myFunction2() { // search engine stuff
+		var input, filter, ul, li, a, i;
+		input = document.getElementById("myInput2");
+		filter = input.value.toUpperCase();
+		ul = document.getElementById("myUL2");
+		li = ul.getElementsByTagName("li");
+		for (i = 0; i < li.length; i++) {
+			a = li[i].getElementsByTagName("a")[0];
+			if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+				li[i].style.display = "";
+			} else {
+				li[i].style.display = "none";
+
+			}
+		}
+	}
+
+	function updateList(dimensions) { // Updating forms with data content
+		var list = document.getElementById("labelIndex");
+		var list_ = document.getElementById("instId");
+		var search = document.getElementById("myUL");
+		var html = '<select name="atrs" id="selattr" style="width:90%;font-size:10px;">';
+		var html_ = '<select name="ids" id="idlist" style="width:90%;font-size:10px;">';
+		var htmls = '';
+		html += '<option value=-1>Choose here</option>'
+		html_ += '<option value=-1>Choose here</option>'
+		for (var i = 0; i < dimensions.length; i++) {
+			html += '<option value=' + i + '>' + dimensions[i].slice(0, 24) + '</option>';
+			html_ += '<option value=' + i + '>' + dimensions[i].slice(0, 24) + '</option>';
+			htmls += '<li id="as' + i + '"><a href=#>' + dimensions[i] + '</a></li>';
+			//htmls += '<input type="button" class="myUL" value="'+dimensions[i]+'">';
+
+		}
+		list.innerHTML = html;
+		list_.innerHTML = html_;
+		search.innerHTML = htmls;
+	}
+	
+	
+	function sampleAction(sampleVector) {
+		var selectM = document.getElementById("selectmode_r")[0].checked; //use want to refine or show values?
+
+		if (selectM) {
+			queryTheseSamples(sampleVector);
+		} else {
+			rebuldRadVizWithTheseSamples(sampleVector);
+		}
+	}
+
+	function updateIdList(ind) {
+		var list = document.getElementById("myUL2");
+		var html = '';
+		for (var i = 0; i < data.length; i++) {
+			html += '<li id="as' + i + '"><a href=#>' + data[i][ind] + '</a></li>';
+		}
+		list.innerHTML = html;
+	}
+
+
+	// export current selection	
+	function download(data, filename, type) {
+		var file = new Blob([data], {
+			type: type
+		});
+		if (window.navigator.msSaveOrOpenBlob) // IE10+
+			window.navigator.msSaveOrOpenBlob(file, filename);
+		else { // Others
+			var a = document.createElement("a"),
+				url = URL.createObjectURL(file);
+			a.href = url;
+			a.download = filename;
+			document.body.appendChild(a);
+			a.click();
+			setTimeout(function() {
+				document.body.removeChild(a);
+				window.URL.revokeObjectURL(url);
+			}, 0);
+		}
+	}
+
+	// data to export
+	function setupExportData(oldData, selDim, allDim, tgtAttr, lblAttr) {
+		var newdta = [];
+		var selDimIndexes = [];
+		var selDimens = selDim.slice();
+
+		selDimens.unshift(allDim[lblAttr]);
+		for (var i = 0; i < selDimens.length; i++)
+			selDimIndexes.push(allDim.indexOf(selDimens[i]));
+		selDimIndexes.push(tgtAttr);
+
+		for (var i = 0; i < selDimIndexes.length; i++) {
+			newdta.push(null);
+			newdta[i] = [];
+			newdta[i].push(selDimens[i]);
+			for (var j = 0; j < oldData[0].length; j++) {
+				newdta[i].push(oldData[selDimIndexes[i]][j]);
+			}
+		}
+		newdta[selDimIndexes.length - 1][0] = newdta[selDimIndexes.length - 1][1];
+
+		if (newdta[selDimIndexes.length - 1].some(isNaN)) {
+			var uniques = newdta[selDimIndexes.length - 1].filter((v, i, a) => a.indexOf(v) === i);
+			for (var i = 0; i < newdta[0].length; i++)
+				newdta[selDimIndexes.length - 1][i] = uniques.indexOf(newdta[selDimIndexes.length - 1][i]);
+		}
+
+		newdta[selDimIndexes.length - 1][0] = allDim[tgtAttr];
+		newdta = transpose(newdta);
+		return newdta;
+	}
+
+	// HTML actions
+
+	///building a word cloud
+	function initWordCloud(data, daName) {
+
+		var maxWords = Math.min(data.length, 200);
+		var datadata = [];
+
+		for (var i = 0; i < maxWords; i++)
+			datadata.push({
+				text: data[i].Name,
+				sizes: Math.abs(data[i][daName])
+			});
+
+		// set the dimensions and margins of the graph
+		var width = document.getElementById("texttooltip").clientWidth,
+			height = document.getElementById("texttooltip").clientHeight;
+
+		// append the svg object to the body of the page
+		svg = d3.select("#texttooltip").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.attr("id", "cloud")
+			.append("g")
+		// Constructs a new cloud layout instance. It run an algorythm to find the position of words that suits your requirements
+		// Wordcloud features that are different from one word to the other must be here 
+		cloudLayout = d3.layout.cloud()
+			.size([width, height])
+			//.words(myWords.map(function(d) { return {text: d}; }))
+			.words(datadata)
+			.padding(1) //space between words
+			.rotate(function() {
+				return ~~(Math.random() * 2) * 90;
+			})
+			.fontSize(function(d) {
+				return wordScale(d.sizes);
+			})
+			.on("end", draw);
+
+		cloudLayout.start();
+	}
+
+	// This function takes the output of 'layout' above and draw the words
+	// Wordcloud features that are THE SAME from one word to the other can be here
+	function draw(words) {
+		svg.append("g")
+			.attr("transform", "translate(" + cloudLayout.size()[0] / 2 + "," + cloudLayout.size()[1] / 2 + ")")
+			.selectAll("text")
+			.data(words)
+			.enter().append("text")
+			.style("font-size", function(d) {return d.size + "px";})
+			//.style("fill", function(d) { return wordColor(Math.random());})
+			.style("fill", function(d) {return wordColor(d.sizes);})
+			.attr("text-anchor", "middle")
+			.style("font-family", "Impact")
+			.attr("transform", function(d) {return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";})
+			.text(function(d) {return d.text;});
+	}
+
+	function showWordCloud(data, daName) {
+		if (showCloud) {
+			//removing previous SVG
+			if (d3.select('svg#cloud')["_groups"][0][0] != null)
+				d3.select('svg#cloud')["_groups"][0][0].remove();
+			//Build the cloud	
+			initWordCloud(data, daName);
+			//showing the DIV
+			document.getElementsByClassName("texttooltip")[0].style.visibility = "visible";
+		}
+	}
+
+	function hideWordCloud() {
+		//hinding the DIV
+		document.getElementsByClassName("texttooltip")[0].style.visibility = "hidden";
+	}
+
+	document.getElementById("loading").addEventListener('webkitTransitionEnd',
+		function(event) {
+			if (flagScreen == 1)
+				radvizSetup(targetAttr);
+			else if (flagScreen == 2)
+				nextAtt([]);
+			else if (flagScreen == 3) {
+				radvizSetup(targetAttr);
+				nextAtt([]);
+			}
+			if (recursionIns == true)
+				radviz.removeItem(dimensions[instIdent]);
+			flagScreen = 0;
+		}, false);
+
+	document.getElementById("labelIndex").onchange = function() {
+		loadingScreenOn(); //loading screen on
+		flagScreen = true;
+		targetAttr = document.getElementById("selattr").selectedIndex - 1; //getting the target choosen by the user
+		document.getElementById("openfile1").disabled = true;
+	}
+
+	document.getElementById("instId").onchange = function() {
+
+		instIdent = document.getElementById("idlist").selectedIndex - 1;
+		radviz.removeItem(dimensions[instIdent]); //removing from first view the attribute selected as identifiers in the second view
+		updateIdList(instIdent);
+		vis ? regularRadviz = 1 : tsneVisualization = 1;
+		loadingScreenOn();
+		flagScreen = 2;
+
+		//nextAtt([]);
+		document.getElementById("setlab").disabled = true;
+
+	}
+
+	document.getElementById("p_elementsnumber").onchange = function() {
+		partElemNumber = document.getElementById("p_elementsnumber").valueAsNumber;
+		sampleChange = true;
+	}
+
+
+	document.getElementById("visKind").onchange = function() {
+		vis = document.getElementById("visKind")[1].checked;
+		if (!vis) { // tsne is the chosen one
+			document.getElementsByClassName("regularRadviz")[0].style.top = "-100vh";
+			document.getElementsByClassName("tsne")[0].style.top = "8px";
+		} else {
+			document.getElementsByClassName("regularRadviz")[0].style.top = "0px";
+			document.getElementsByClassName("tsne")[0].style.top = "100vh";
+		}
+	}
+	
+	document.getElementById("selectcormode").onchange = function() {
+		binarizationMode = document.getElementById("selectcormode")[0].checked;
+	}
+
+	document.getElementById("ibars").onchange = function() {
+		radviz.setBarsVisible(document.getElementById("ibars")[0].checked);
+	}
+
+	document.getElementById("nborder").onchange = function() {
+		radviz.setBorderVisible(document.getElementById("nborder")[0].checked);
+	}
+
+
+	document.getElementById("dlinks").onchange = function() {
+		drawLinks = document.getElementById("dlinks")[0].checked;
+	}
+
+	document.getElementById("wcloud").onchange = function() {
+		showCloud = document.getElementById("wcloud")[0].checked;
+	}
+
+	document.getElementById("ibars_r").onchange = function() {
+
+		regularRadviz.setBarsVisible(document.getElementById("ibars_r")[0].checked);
+	}
+
+	document.getElementById("normalizedata").onchange = function() {
+		normalizeDT = document.getElementById("normalizedata")[0].checked;
+	}
+
+	document.getElementById("resize").onchange = function() {
+		attRadDotSize = document.getElementById("resize").value;
+		radviz.config({
+			dotSize: attRadDotSize
+		});
+		radviz.resizeElements(attRadDotSize);
+	}
+
+	document.getElementById("resize_r").onchange = function() {
+		regularRadviz.config({
+			dotSize: document.getElementById("resize_r").value
+		});
+		regularRadviz.resizeElements(document.getElementById("resize_r").value);
+
+		tsneVisualization.config({
+			dotSize: document.getElementById("resize_r").value / 2
+		});
+		tsneVisualization.resizeElements();
+	}
+
+	document.getElementById("trans").onchange = function() {
+		radviz.config({
+			elemOpacity: document.getElementById("trans").value * 0.01
+		});
+		radviz.setTransparency(document.getElementById("trans").value * 0.01);
+	}
+
+	document.getElementById("trans_r").onchange = function() {
+		//radviz.config({dotSize:document.getElementById("resize").value});
+		regularRadviz.setTransparency(document.getElementById("trans_r").value * 0.01);
+	}
+
+	document.getElementById("collision_r").onchange = function() {
+		regularRadviz.changeForce(document.getElementById("collision_r").value);
+	}
+
+
+	document.getElementById("strengthSlr_r").onchange = function() {
+		regularRadviz.changeStrength(document.getElementById("strengthSlr_r").value);
+	}
+
+
+
+	document.getElementById("collision").onchange = function() {
+		forceCollide = document.getElementById("collision").value;
+		radviz.changeForce(forceCollide);
+	}
+
+	document.getElementById("strengthSlr").onchange = function() {
+		forceStrength = document.getElementById("strengthSlr").value;
+		radviz.changeStrength(forceStrength);
+	}
+
+	document.getElementById("multistep").onchange = function() {
+		radviz.multiSelect(+document.getElementById("multistep").value);
+	}
+
+	document.getElementById("autoalign_r").onchange = function() {
+
+		autoalign = document.getElementById("autoalign_r")[0].checked;
+		autosort = document.getElementById("autoalign_r")[1].checked;
+		document.getElementById("autos").disabled = !autoalign;
+	}
+
+	document.getElementById("btclear").onclick = function() {
+		regularRadviz.deleteALL();
+	}
+
+	document.getElementById("silhouette").onclick = function() {
+		var result = getAllSlhouette();
+		alert("Silhouette values:\nOriginal: " + result[0].toFixed(4) + "\nSelected Subspace: " + result[1].toFixed(4) + "\nSelected and projected (RadViz): " + result[2].toFixed(4));
+	}
+
+	document.getElementById("atSearchClose").onclick = function() {
+		document.getElementsByClassName("attribSearch")[0].style.visibility = document.getElementsByClassName("attribSearch")[0].style.visibility == "visible" ? "hidden" : "visible";
+	}
+
+	document.getElementById("itSearchClose").onclick = function() {
+		document.getElementsByClassName("itemSearch")[0].style.visibility = document.getElementsByClassName("itemSearch")[0].style.visibility == "visible" ? "hidden" : "visible";
+	}
+
+	document.getElementById("queryClose").onclick = function() { //closing the query of samples
+		document.getElementById("black").style.opacity = 0;
+		document.getElementById("black").style.visibility = "hidden";
+		document.getElementById("sampleQuery").style.height = '0%';
+		document.getElementById("sampleQuery").style.opacity = 0;
+		document.getElementById("sampleQuery").style.visibility = "hidden";
+	}
+
+	document.getElementById("atSearch").onclick = function() {
+		document.getElementsByClassName("attribSearch")[0].style.visibility = document.getElementsByClassName("attribSearch")[0].style.visibility == "visible" ? "hidden" : "visible";
+	}
+
+	document.getElementById("tsneRefresh").onclick = function() {
+		refreshTSNE();
+	}
+
+	document.getElementById("radRefresh").onclick = function() {
+		refreshRadviz();
+	}
+
+	document.getElementById("itSearch").onclick = function() {
+		document.getElementsByClassName("itemSearch")[0].style.visibility = document.getElementsByClassName("itemSearch")[0].style.visibility == "visible" ? "hidden" : "visible";
+	}
+
+	document.getElementById("expCSV").onclick = function() { //exporting as CSV
+		var mode = document.getElementById("expSize")[0].checked;
+		if (mode) // export full or sampled data
+			var expData = setupExportData(tData, seldim, fullDimList, targetAttr, idAttr);
+		else
+			var expData = setupExportData(tDataExport, seldim, fullDimList, targetAttr, idAttr);
+		let csvContent = '';
+		expData.forEach(function(rowArray) {
+			let row = rowArray.join(",");
+			csvContent += row + "\r\n"; // add carriage return
+		});
+		download(csvContent, 'data.csv', 'text/plain');
+	}
+
+	document.getElementById("expDAT").onclick = function() { //exporting as DATA
+		var mode = document.getElementById("expSize")[0].checked;
+		if (mode) // export full or sampled data
+			var expData = setupExportData(tData, seldim, fullDimList, targetAttr, idAttr);
+		else
+			var expData = setupExportData(tDataExport, seldim, fullDimList, targetAttr, idAttr);
+		let csvContent = 'DY' + '\r\n' + (expData.length - 1) + "\r\n" + expData[0].length + "\r\n";
+		expData.forEach(function(rowArray) {
+			let row = rowArray.join(";");
+			csvContent += row + "\r\n"; // add carriage return
+		});
+		download(csvContent, 'data.data', 'text/plain');
+	}
+
+
+	// Clicking on the search element
+	document.getElementById("myUL").addEventListener("click", function(e) {
+		e.target.style.color = e.target.style.color == 'grey' ? 'black' : 'grey';
+		radviz.hideNshow(e.target.innerText, e.target.style.color);
+	});
+
+	// Clicking on the search element
+	document.getElementById("myUL2").addEventListener("click", function(e) {
+		e.target.style.color = e.target.style.color == 'grey' ? 'black' : 'grey';
+		regularRadviz.hideNshow(e.target.innerText, e.target.style.color);
+	});
+
+	// mouse hovering the search elements
+	document.getElementById("myUL").addEventListener("mouseover", function(e) {
+		radviz.highlightElem(e.target.innerText);
+	});
+
+	document.getElementById("myUL2").addEventListener("mouseover", function(e) {
+		regularRadviz.highlightElem(e.target.innerText);
+	});
+
+	// Mouse out element search list
+	document.getElementById("myUL").addEventListener("mouseout", function(e) {
+		radviz.undoHighlight();
+	});
+
+	document.getElementById("myUL2").addEventListener("mouseout", function(e) {
+		regularRadviz.undoHighlight();
+	});
+
+
+	function nextAtt(dim) {
+		seldim = dim.slice();
+
+		if (!(regularRadviz == undefined) || !(tsneVisualization == undefined)) {
+			if (autoalign || dim.length == 0)
+				regularRadvizSetup(document.getElementById("selattr").selectedIndex - 1, document.getElementById("idlist").selectedIndex - 1, dim, 0);
+			else {
+				var angleTable = regularRadviz.getAngles().slice(0, dim.length);
+				regularRadvizSetup(document.getElementById("selattr").selectedIndex - 1, document.getElementById("idlist").selectedIndex - 1, dim, angleTable);
+			}
+		}
+	}
+
+	//============================================					================================================================\\ 	
+	//============================================ RadViz Rendering ================================================================\\ 	
+	//============================================					================================================================\\ 	
+
+	function radvizSetup(label_index) {
+		// testing if the radviz is already rendered and then delete the previous one
+		if (d3.select('svg#rad')["_groups"][0][0] != null) {
+			d3.select('svg#rad')["_groups"][0][0].remove();
+			d3.select('#radviz-tooltip')["_groups"][0][0].remove();
+		}
+		//regularData = data.slice();
+		tData = data.slice();
+
+		if (sampling.length > 0) { //filtering the data
+			var filteredData = [];
+			for (var i = 0; i < sampling.length; i++)
+				filteredData.push(tData[sampling[i]]);
+			tData = filteredData;
+		}
+
+		for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
+			tData = tData.filter(function(e) {
+				return e[label_index] !== labelOut[i]
+			});
+		}
+
+		lbIndex = label_index;
+		tData = transpose(tData); // Trasnposing the matrix 	
+		labelSet = tData[label_index].filter((v, i, a) => a.indexOf(v) === i); // Getting the uniques values of label vector
+		var binLabel = [];
+		for (var i = 0; i < labelSet.length; i++) { // Calculating the binary vector for each label
+			binLabel.push(tData[label_index].map(function(x) {
+				return binarize(x, labelSet[i]);
+			}));
+		};
+		var dbBal = balanceCounter(binLabel);
+		var readyData = tData.concat(binLabel);
+		var correlationMatrix = [];
+		var size = [];
+		var weights = [];
+
+		for (var i = 0; i < tData.length; i++) {
+			correlationMatrix[i] = [];
+			for (var j = 0; j < labelSet.length; j++) {
+				correlationMatrix[i].push(correlation(readyData, i, j + tData.length));
+				weights.push(Math.abs(correlationMatrix[i][j]) * dbBal[j]); // Calcs the initial sizes			
+			}
+			
+			if (binarizationMode)
+				size.push(weights.reduce((a, b) => a + b, 0));
+			else	
+				size.push(correlation(readyData,i,label_index)); //Old size calc
+			
+			weights = [];
+
+		};
+
+		radvizData = toObject(correlationMatrix, labelSet, dimensions, size);
+		radvizData.splice(label_index, 1); // Removing the label atribute
+
+		var cpyData = tData.slice();
+
+		if (sortLabel)
+			labelSet = labelSort(cpyData, labelSet, label_index);
+
+		resize_ratio = (document.getElementById("radvizdiv").clientWidth - 118) / 550;
+
+		radviz = radvizComponent() // Updating radviz settings
+			.config({
+				el: document.querySelector('.container'),
+				dimensions: labelSet,
+				dbBalance: dbBal,
+				size: resize_ratio * 550,
+				infoPanelLeft: resize_ratio * 490 - 35,
+				infoPanelBot: resize_ratio * 480 - 205,
+				arcwidth1: 5.5 * resize_ratio,
+				arcwidth2: 10 * resize_ratio,
+				dotSize: 20 * resize_ratio,
+				mainCicleStroke: 1.5 * resize_ratio,
+				drawLinks: drawLinks,
+				forceStrength: forceStrength,
+				collideRatio: forceCollide,
+				dotSize: attRadDotSize,
+			});
+
+		radviz.render(radvizData);
+		loadingScreenOff();
+
+	}
+
+	function colorCalc(labelSet, labelVector, label_index) {
+		var colorArray = [];
+		for (var i = 0; i < labelVector.length; i++)
+			colorArray.push(labelSet.indexOf(labelVector[i][label_index]));
+		return colorArray;
+	};
+
+	function toNumerical(vector1, vector2) {
+		var p1Categorical = vector1.some(isNaN);
+		var p2Categorical = vector2.some(isNaN);
+		var _data = [];
+
+		if (p1Categorical && p2Categorical) { // Transforming the first in random numbers and throw in next case
+			var uniquesP2 = vector2.filter((v, i, a) => a.indexOf(v) === i);
+			_data[1] = [];
+			for (var j = 0; j < uniquesP2.length; j++) {
+				for (var i = 0; i < vector2.length; i++) {
+					if (uniquesP2[j] == vector2[i])
+						_data[1][i] = j;
+				}
+			}
+			p2Categorical = !p2Categorical;
+			vector2 = _data[1];
+		}
+		if (p1Categorical && !p2Categorical) {
+			var sum, n;
+			var avg = [];
+			penalty = 0;
+			var uniques = vector1.filter((v, i, a) => a.indexOf(v) === i);
+			for (var j = 0; j < uniques.length; j++) {
+				sum = 0;
+				n = 0;
+				for (var i = 0; i < vector1.length; i++)
+					if (uniques[j] == vector1[i]) {
+						sum += +vector2[i];
+						n++;
+					}
+				avg[j] = sum / n;
+			}
+			_data[0] = [];
+
+			for (var j = 0; j < uniques.length; j++) {
+				for (var i = 0; i < vector1.length; i++)
+					if (uniques[j] == vector1[i]) _data[0][i] = avg[j];
+			}
+
+			_data[1] = vector2;
+		}
+		return _data[0];
+
+	};
+
+	function matrixSetup(data, attList) //Calculating the correlation matrix intended for the dimensions sort
+	{
+		var mat = [];
+		for (var i = 0; i < attList.length; i++) {
+			mat[i] = [];
+			for (var j = 0; j < attList.length; j++) {
+				mat[i][j] = correlation(data, alldim.indexOf(attList[i]), alldim.indexOf(attList[j]));
+			}
+		}
+		return mat;
+	};
+
+	function placeIt(where, newList, oldAttrib, newAttrib) {
+		var position;
+		var sortList = [];
+
+		var currentSlot = where == 'near' ? newList.indexOf(oldAttrib) : newList.indexOf(oldAttrib) + parseInt(newList.length / 2, 10);
+		currentSlot = currentSlot > newList.length ? currentSlot - newList.length : currentSlot;
+
+		for (var i = 0; i < newList.length; i++)
+			sortList[i] = newList[(currentSlot + i) < newList.length ? currentSlot + i : currentSlot + i - newList.length];
+
+		var tempList = [].concat(sortList);
+		tempList.reverse();
+		position = +(sortList.indexOf(null)) <= +(tempList.indexOf(null) + 1) ? sortList.indexOf(null) : sortList.length - tempList.indexOf(null) - 1;
+		sortList[position] = newAttrib;
+
+		for (var i = 0; i < newList.length; i++)
+			newList[i] = sortList[(newList.length - currentSlot + i) < newList.length ? newList.length - currentSlot + i : i - currentSlot];
+
+	};
+
+	function dimensionsSort(data, attList) {
+		var newList = [];
+		for (var i = 0; i < attList.length; i++) newList[i] = null;
+		var matrix = matrixSetup(data, attList);
+
+		for (var i = 0; i < attList.length; i++) // sorting dimensions
+		{
+			var mMax = 0;
+			var nMax = 0;
+			var maxValue = 0;
+			for (var n = 0; n < attList.length; n++)
+				for (var m = 0; m < n; m++) { // percorrer dentre os adicionados
+					var a = contains.call(newList, attList[m]);
+					var b = contains.call(newList, attList[n]);
+					if ((maxValue < Math.abs(matrix[n][m])) && (((a && !b) || (!a && b)) || (newList[0] == null))) {
+						maxValue = Math.abs(matrix[n][m]);
+						mMax = a ? m : n;
+						nMax = !a ? m : n;
+					}
+
+				}
+
+			if (newList[0] == null) //placing the first dimension
+				newList[0] = attList[nMax];
+			else if (matrix[nMax][mMax] > 0) { //if its positive must be placed near
+				placeIt('near', newList, attList[mMax], attList[nMax]);
+			} else
+				placeIt('far', newList, attList[mMax], attList[nMax]);
+		}
+		return newList;
+	};
+
+	function labelSort(data, labelList, labelIdx) {
+		var newList = [];
+		var averageLabelElement = new Array(labelList.length).fill(0);
+		var currentLabel = 0;
+		var labelCount = new Array(labelList.length).fill(0);
+		//labelCount.apply(null, labelCount(5)).map(Number.prototype.valueOf,0);   // init values of counter as 0
+
+		for (var i = 0; i < data.length; i++) //Converting all categorical to numerical			
+			if (data[i].some(isNaN) && i != labelIdx)
+				data[i] = toNumerical(data[i], data[labelIdx]);
+
+
+		for (var i = 0; i < labelList.length; i++) {
+			newList[i] = null;
+			averageLabelElement[i] = new Array(data[0].length).fill(0);
+		}
+
+		for (var i = 0; i < data[0].length; i++) { //finding the average elements to represent each label
+			currentLabel = labelList.indexOf(data[labelIdx][i]);
+			for (var j = 0; j < data.length; j++) {
+				if (j != labelIdx) {
+					averageLabelElement[currentLabel][j] += Number(data[j][i]);
+				}
+			}
+			labelCount[currentLabel] += 1;
+		}
+		for (var i = 0; i < averageLabelElement.length; i++)
+			for (var j = 0; j < averageLabelElement[0].length; j++)
+				averageLabelElement[i][j] = averageLabelElement[i][j] / labelCount[i];
+
+		var matrix = new Array(averageLabelElement.length).fill(0);
+
+		for (var i = 0; i < averageLabelElement.length; i++) { // set up the correlation matrix between the labels
+			matrix[i] = new Array(averageLabelElement.length).fill(0);
+			for (var j = 0; j < averageLabelElement.length; j++)
+				matrix[i][j] = correlation([averageLabelElement[i], averageLabelElement[j]], 0, 1);
+		}
+
+		for (var i = 0; i < labelList.length; i++) // sorting dimensions
+		{
+			var mMax = 0;
+			var nMax = 0;
+			var maxValue = 0;
+			for (var n = 0; n < labelList.length; n++)
+				for (var m = 0; m < n; m++) { // percorrer dentre os adicionados
+					var a = contains.call(newList, labelList[m]);
+					var b = contains.call(newList, labelList[n]);
+					if ((maxValue < Math.abs(matrix[n][m])) && (((a && !b) || (!a && b)) || (newList[0] == null))) {
+						maxValue = Math.abs(matrix[n][m]);
+						mMax = a ? m : n;
+						nMax = !a ? m : n;
+					}
+
+				}
+
+			if (newList[0] == null) //placing the first dimension
+				newList[0] = labelList[nMax];
+			else if (matrix[nMax][mMax] > 0) { //if its positive must be placed near
+				placeIt('near', newList, labelList[mMax], labelList[nMax]);
+			} else
+				placeIt('far', newList, labelList[mMax], labelList[nMax]);
+		}
+
+
+
+		return newList;
+	}
+
+	function getRandomValues(arr, count, newcolor, oldcolor) {
+		var result = [];
+		var _tmp = arr.slice();
+		var _color = oldcolor.slice();
+		var indexes = [];
+		randomStore = [];
+		_tmp2 = tData.slice();
+		_tmp2 = transpose(_tmp2);
+
+		tDataExport = [];
+		for (var i = 0; i < arr.length; i++)
+			indexes.push(i);
+
+		if (arr.length < count) count = arr.length;
+		for (var i = 0; i < count; i++) {
+			var index = Math.ceil(Math.random() * (_tmp.length - 1));
+			randomStore.push(indexes.splice(index, 1)[0]);
+			result.push(_tmp.splice(index, 1)[0]);
+			tDataExport.push(_tmp2.splice(index, 1)[0]); //splicing to export too
+			newcolor.push(_color.splice(index, 1)[0]);
+			/*if (result[result.length-1]==undefined)
+				var readkey=10;*/
+		}
+
+		tDataExport = transpose(tDataExport);
+		return result;
+	}
+
+	function regularRadvizSetup(label_index, id_index, selDimensions, angleTable) {
+		sDims = selDimensions.slice();
+
+		if (firstRun) {
+			regularData = data.slice();
+			var size = [];
+			var dbBal = [];
+			var id = [];
+			idAttr = id_index;
+
+
+			for (var i = 0; i < regularData.length; i++) {
+				size[i] = 0.2;
+				dbBal[i] = 1;
+				id.push(i);
+			};
+
+			colors = colorCalc(labelSet, regularData, label_index);
+			regularData = transpose(regularData);
+			fullDimList = dimensions.slice();
+			var dimensions_ = dimensions.slice();
+			var names = regularData[id_index];
+
+			for (var i = 0; i < regularData.length; i++)
+				if (regularData[i].some(isNaN))
+					regularData[i] = toNumerical(regularData[i], regularData[label_index]);
+
+
+
+			if (label_index == id_index) { // Removing label and id vectors
+				regularData.splice(label_index, 1);
+				dimensions_.splice(label_index, 1);
+
+			} else if (label_index > id_index) { // Removing label and id vectors
+				regularData.splice(label_index, 1);
+				regularData.splice(id_index, 1);
+				dimensions_.splice(label_index, 1);
+				dimensions_.splice(id_index, 1);
+
+			} else {
+				regularData.splice(id_index, 1);
+				regularData.splice(label_index, 1);
+				dimensions_.splice(id_index, 1);
+				dimensions_.splice(label_index, 1);
+			}
+
+			arrayData = regularData;
+			regularData = transpose(regularData);
+
+			regularData = toObject(regularData, dimensions_, names, size);
+
+
+			if (sampling.length > 0) { //filtering the data
+				var filteredData = [];
+				var newcolors = [];
+				for (var i = 0; i < sampling.length; i++) {
+					filteredData.push(regularData[sampling[i]]);
+					newcolors.push(colors[sampling[i]]);
+				}
+				regularData = filteredData;
+				colors = newcolors;
+			}
+
+			for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
+				regularData = regularData.filter(function(e) {
+					return e[label_index] !== labelOut[i]
+				});
+			}
+
+			alldim = dimensions_.slice();
+
+			dimensions_.splice(0, dimensions_.length - 3);
+
+
+			regularRadviz = radvizRegular() // Updating radviz settings
+				.config({
+					el: document.querySelector('.containerRegular'),
+					dimensions: dimensions_,
+					allDimensions: alldim,
+					dbBalance: dbBal,
+					colors: colors,
+					labelSet: labelSet,
+					size: resize_ratio * 550,
+					infoPanelSub: 1.2 * resize_ratio * 310,
+					arcwidth1: 5.5 * resize_ratio,
+					arcwidth2: 10 * resize_ratio,
+					dataSize: regularData.length,
+					mainCicleStroke: 1.5 * resize_ratio,
+				});
+
+			tsneVisualization = tsneComponent()
+				.config({
+					el: document.querySelector('.containerTSNE'),
+					width: resize_ratio * 650,
+					height: resize_ratio * 650,
+					dimensions: alldim,
+					colors: colors,
+					dataSize: regularData.length,
+				});
+			//var dataCopy = regularData.slice(partElemNumber*(partNumber-1),partElemNumber*partNumber);
+
+
+			if (sampleChange) {
+				var newcolors = [];
+				dataCopy = getRandomValues(regularData, partElemNumber, newcolors, colors);
+				tsneVisualization.config({
+					colors: newcolors
+				});
+				regularRadviz.config({
+					colors: newcolors
+				});
+				sampleChange = false;
+			}
+
+			if (!vis)
+				tsneVisualization.render(dataCopy, firstRun);
+			else
+				regularRadviz.render(dataCopy, firstRun);
+
+
+		} else {
+			//var dataCopy = regularData.slice(partElemNumber*(partNumber-1),partElemNumber*partNumber);
+			if (sampleChange) {
+				var newcolors = [];
+				dataCopy = getRandomValues(regularData, partElemNumber, newcolors, colors);
+				tsneVisualization.config({
+					colors: newcolors
+				});
+				regularRadviz.config({
+					colors: newcolors
+				});
+				sampleChange = false;
+			}
+			//regularRadviz.render(dataCopy, firstRun);
+			if (!vis) {
+				if (selDimensions.length > 1 || (firstRun))
+					tsneVisualization.config({
+						dimensions: selDimensions,
+					});
+				//tsneVisualization.render(dataCopy, firstRun);
+			} else {
+
+				if (autoalign && autosort) {
+					var selDimOrdered = []; //Sorting seldimensions accordly to the original dataset
+					for (var i = 0; i < alldim.length; i++)
+						if (contains.call(selDimensions, alldim[i]))
+							selDimOrdered.push(alldim[i]);
+
+					selDimensions = dimensionsSort(arrayData, selDimOrdered); //calling the sortind dimensions method
+				}
+				regularRadviz.config({
+					dimensions: selDimensions,
+					angleTable: angleTable ? angleTable : [],
+				});
+
+
+				regularRadviz.render(dataCopy, firstRun);
+			}
+
+		};
+		firstRun = false;
+
+		loadingScreenOff();
+	}
+
+	function refreshTSNE() {
+		if (sampleChange) {
+			var newcolors = [];
+			dataCopy = getRandomValues(regularData, partElemNumber, newcolors, colors);
+			tsneVisualization.config({
+				colors: newcolors
+			});
+			regularRadviz.config({
+				colors: newcolors
+			});
+			sampleChange = false;
+		}
+		tsneVisualization.render(dataCopy, firstRun);
+	}
+
+	function rebuldRadVizWithTheseSamples(sampleVector) {
+		var prunedData = [];
+		var newDimList = dimensions.slice();
+		var targetPosition = targetAttr;
+
+		for (var i = 0; i < sampleVector.length; i++)
+			prunedData.push(data[sampleVector[i]]);
+
+		if (filterAttrs == true) {
+			prunedData = transpose(prunedData);
+			for (var i = 0; i < seldim.length; i++) {
+				if (newDimList.indexOf(seldim[i]) < targetPosition) targetPosition--; //updateing target position
+				if (newDimList.indexOf(seldim[i]) < instIdent) instIdent--; //updateing target position
+
+
+				prunedData.splice(newDimList.indexOf(seldim[i]), 1);
+				newDimList.splice(newDimList.indexOf(seldim[i]), 1);
+			}
+			prunedData = transpose(prunedData);
+		}
+		//storing parameters
+		localStorage.setItem("parPass", JSON.stringify([targetPosition, instIdent, forceStrength, forceCollide, attRadDotSize, showCloud, drawLinks]));
+		//storing the data
+		localStorage.setItem("dataPass", JSON.stringify(prunedData));
+		//storing dimension list
+		localStorage.setItem("dimPass", JSON.stringify(newDimList));
+
+
+
+
+		//recursive call!
+		var childWind = window.open('./DualRadViz.html?recursion=true');
+
+	}
+
+	//calc de silhouette for original, original (selected) and projected data
+	function getAllSlhouette() {
+
+		// clonning the original data
+		var localData = data.slice();
+		//transposing for del cat attrs
+		localData = transpose(localData);
+		//looking for cat attrs and deleting
+		for (var i = 0; i < localData.length; i++) {
+			if (localData[i].some(isNaN)) {
+				localData.splice(i, 1);
+				i--;
+			}
+		}
+		//normalize
+		if (normalizeDT) {
+			for (var i = 0; i < localData.length; i++)
+				localData[i] = normalize_array(localData[i]);
+		}
+
+		//transposing back
+		localData = transpose(localData);
+		var res1 = getSilhouette(localData);
+
+		//now calc siloueta for selected attribs
+		localData = data.slice();
+		//transposing for del cat attrs
+		localData = transpose(localData);
+
+		var selData = [];
+
+		//copying only the sel data
+		for (var i = 0; i < localData.length; i++)
+			if (contains.call(seldim, dimensions[i]))
+				selData.push(localData[i])
+
+		//looking for cat attrs and deleting
+		for (var i = 0; i < selData.length; i++) {
+			if (selData[i].some(isNaN)) {
+				selData.splice(i, 1);
+				i--;
+			}
+		}
+
+		//normalize
+		if (normalizeDT) {
+			for (var i = 0; i < selData.length; i++)
+				selData[i] = normalize_array(selData[i]);
+		}
+
+		//transposing back
+		selData = transpose(selData);
+		var res2 = getSilhouette(selData);
+
+		var res3 = regularRadviz.getSilhouette();
+
+		return [res1, res2, res3];
+	};
+
+	function getSilhouette(arraydata) {
+		var a_i_vector = [];
+		var b_i_averages = [];
+		var counter = [];
+		var b_i = 0;
+		var a_i = 0;
+		var sum = 0;
+
+		for (var i = 0; i < arraydata.length; i++) {
+			b_i_averages = new Array(labelSet.length).fill(0);
+			counter = new Array(labelSet.length).fill(0);
+			a_i_vector = [];
+			// calcs b_i
+			for (var j = 0; j < arraydata.length; j++)
+				if ((colors[i] != colors[j]) && (j != i)) {
+					b_i_averages[colors[j]] += eucDistance(arraydata[i], arraydata[j]);
+					counter[colors[j]] += 1;
+				}
+
+			for (var w = 0; w < b_i_averages.length; w++)
+				if (counter[w] == 0) {
+
+					b_i_averages.splice(w, 1);
+					counter.splice(w, 1);
+				}
+
+			for (var w = 0; w < b_i_averages.length; w++)
+				b_i_averages[w] = b_i_averages[w] / counter[w];
+
+			b_i = b_i_averages.min();
+			// calcs a_i
+			for (var j = 0; j < arraydata.length; j++)
+				if ((colors[i] == colors[j]) && (j != i))
+					a_i_vector.push(eucDistance(arraydata[i], arraydata[j]))
+			a_i = average(a_i_vector);
+			if ((a_i == 0) && (b_i == 0)) {
+				sum += 0;
+			} else
+				sum += (b_i - a_i) / ([a_i, b_i].max());
+		}
+		return sum / arraydata.length;
+	}
+
+	function removeLabel(label) {
+		labelOut.push(label);
+	}
+
+	function refreshRadviz() {
+		if (sDims.length == 0)
+			sDims = alldim.slice(0, 3);
+		nextAtt(sDims);
+	}
+
+	function updateRadViz() {
+		radvizSetup(lbIndex);
+	}
+	syncForms();
+
+</script>
+</body></html>
