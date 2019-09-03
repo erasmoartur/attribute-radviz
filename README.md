@@ -110,6 +110,9 @@ We have included three sample data sets that can help you to get started within 
 * Adjunting the quota in firefox:
   * Go to about:config and search for "dom.storage.default_quota" and fill the value (in kilobytes).
   
+## Citation
+* E. Artur and R. Minghim, A novel visual approach for enhanced attribute analysis and selection, Computers &
+Graphics, https://doi.org/10.1016/j.cag.2019.08.015
 
 ## Get in touch
 Erasmo Artur - erasmoartur@usp.br
