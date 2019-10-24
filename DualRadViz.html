@@ -1420,6 +1420,12 @@
 			var dbBal = [];
 			var id = [];
 			idAttr = id_index;
+		
+		for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
+			regularData = regularData.filter(function(e) {
+				return e[label_index] !== labelOut[i]
+			});
+		};
 
 
 			for (var i = 0; i < regularData.length; i++) {
