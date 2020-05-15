@@ -1245,6 +1245,14 @@ var radvizComponent = function () {
 			
 		};
 		
+		function hideIDAttr(eName){
+				d3.selectAll('.dot')
+					.style('visibility', "visible")
+					.filter(function(dn){return dn.Name == eName})
+					.style('visibility', "hidden");
+			
+		};
+		
 		function removeItem(eName){
 				config.identifierName = eName;
 				d3.selectAll('.dot')
@@ -1288,6 +1296,7 @@ var radvizComponent = function () {
 		changeForce: changeForce,
 		changeStrength: changeStrength,
 		multiSelect: multiSelect,
+		hideIDAttr: hideIDAttr,
 		hideNshow: hideNshow
     };
 
