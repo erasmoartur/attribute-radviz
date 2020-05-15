@@ -871,24 +871,26 @@
 	}
 
 	document.getElementById("instId").onchange = function() {
-
-
-		firstRun = true;  //Forcing recomputing the regularData
-		sampleChange = true;
 		
-		
-		instIdent = document.getElementById("idlist").selectedIndex - 1;
-		//radviz.removeItem(dimensions[instIdent]); //removing from first view the attribute selected as identifiers in the second view
-		radviz.hideIDAttr(dimensions[instIdent]); //hiding the ID attribute
-		
-		updateIdList(instIdent);
-		vis ? regularRadviz = 1 : tsneVisualization = 1;
-		loadingScreenOn();
-		flagScreen = 2;
+		instIdent = document.getElementById("idlist").selectedIndex - 1; // the selected attr
 
-		//nextAtt([]);
-		//document.getElementById("setlab").disabled = true;
-
+		if (instIdent > -1){
+			
+			firstRun = true;  //Forcing recomputing the regularData
+			sampleChange = true;			
+			
+			//radviz.removeItem(dimensions[instIdent]); //removing from first view the attribute selected as identifiers in the second view
+			radviz.hideIDAttr(dimensions[instIdent]); //hiding the ID attribute
+			
+			updateIdList(instIdent);
+			vis ? regularRadviz = 1 : tsneVisualization = 1;
+			
+			if (contains.call(seldim, dimensions[instIdent])) //if the new chosen attr is already one of the selected, remove it
+				seldim.splice(seldim.indexOf(dimensions[instIdent]),1);
+			
+			loadingScreenOn();
+			flagScreen = 2;		
+		}
 	}
 
 	document.getElementById("p_elementsnumber").onchange = function() {
