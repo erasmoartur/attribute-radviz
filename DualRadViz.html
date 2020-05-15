@@ -250,7 +250,7 @@
 	var arrayData;
 	var alldim;
 	var fullDimList;
-	var seldim;
+	var seldim = [];
 	var idAttr;
 	var lbIndex;
 	var partElemNumber = 500;
@@ -272,7 +272,6 @@
 	var svg;
 	var showCloud = false;
 	var binarizationMode = true;
-	var sDims = [];
 	var wordScale = d3.scaleLinear().domain([0, 1]).range([5, 20, 80, 160]).clamp(true);
 	var wordColor = d3.scaleLinear().range(['#858c6e', '#09ba2c']);
 
@@ -853,13 +852,14 @@
 			if (flagScreen == 1)
 				radvizSetup(targetAttr);
 			else if (flagScreen == 2)
-				nextAtt([]);
+				nextAtt(seldim);
 			else if (flagScreen == 3) {
 				radvizSetup(targetAttr);
 				nextAtt([]);
 			}
 			if (recursionIns == true)
-				radviz.removeItem(dimensions[instIdent]);
+				radviz.hideIDAttr(dimensions[instIdent]);
+				//radviz.removeItem(dimensions[instIdent]);
 			flagScreen = 0;
 		}, false);
 
@@ -872,15 +872,22 @@
 
 	document.getElementById("instId").onchange = function() {
 
+
+		firstRun = true;  //Forcing recomputing the regularData
+		sampleChange = true;
+		
+		
 		instIdent = document.getElementById("idlist").selectedIndex - 1;
-		radviz.removeItem(dimensions[instIdent]); //removing from first view the attribute selected as identifiers in the second view
+		//radviz.removeItem(dimensions[instIdent]); //removing from first view the attribute selected as identifiers in the second view
+		radviz.hideIDAttr(dimensions[instIdent]); //hiding the ID attribute
+		
 		updateIdList(instIdent);
 		vis ? regularRadviz = 1 : tsneVisualization = 1;
 		loadingScreenOn();
 		flagScreen = 2;
 
 		//nextAtt([]);
-		document.getElementById("setlab").disabled = true;
+		//document.getElementById("setlab").disabled = true;
 
 	}
 
@@ -1098,7 +1105,6 @@
 
 	function nextAtt(dim) {
 		seldim = dim.slice();
-
 		if (!(regularRadviz == undefined) || !(tsneVisualization == undefined)) {
 			if (autoalign || dim.length == 0)
 				regularRadvizSetup(document.getElementById("selattr").selectedIndex - 1, document.getElementById("idlist").selectedIndex - 1, dim, 0);
@@ -1412,14 +1418,13 @@
 	}
 
 	function regularRadvizSetup(label_index, id_index, selDimensions, angleTable) {
-		sDims = selDimensions.slice();
 
 		if (firstRun) {
 			regularData = data.slice();
 			var size = [];
 			var dbBal = [];
 			var id = [];
-			idAttr = id_index;
+			idAttr = id_index; //Storing to the export option
 		
 		for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
 			regularData = regularData.filter(function(e) {
@@ -1489,6 +1494,9 @@
 			alldim = dimensions_.slice();
 
 			dimensions_.splice(0, dimensions_.length - 3);
+			
+			if (seldim.length != 0) 
+				dimensions_ = seldim;
 
 
 			regularRadviz = radvizRegular() // Updating radviz settings
@@ -1499,6 +1507,7 @@
 					dbBalance: dbBal,
 					colors: colors,
 					labelSet: labelSet,
+					tooltipNames: names,
 					size: resize_ratio * 550,
 					infoPanelSub: 1.2 * resize_ratio * 310,
 					arcwidth1: 5.5 * resize_ratio,
@@ -1739,9 +1748,9 @@
 	}
 
 	function refreshRadviz() {
-		if (sDims.length == 0)
-			sDims = alldim.slice(0, 3);
-		nextAtt(sDims);
+		if (seldim.length == 0)
+			seldim = alldim.slice(0, 3);
+		nextAtt(seldim);
 	}
 
 	function updateRadViz() {
