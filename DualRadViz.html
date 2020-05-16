@@ -849,8 +849,10 @@
 
 	document.getElementById("loading").addEventListener('webkitTransitionEnd',
 		function(event) {
-			if (flagScreen == 1)
+			if (flagScreen == 1){
 				radvizSetup(targetAttr);
+				radviz.hideIDAttr(dimensions[instIdent]);
+				}
 			else if (flagScreen == 2)
 				nextAtt(seldim);
 			else if (flagScreen == 3) {
@@ -864,10 +866,14 @@
 		}, false);
 
 	document.getElementById("labelIndex").onchange = function() {
+		
+		targetAttr = document.getElementById("selattr").selectedIndex - 1; //getting the target choosen by the user
+	
+		if (targetAttr > -1){
 		loadingScreenOn(); //loading screen on
 		flagScreen = true;
-		targetAttr = document.getElementById("selattr").selectedIndex - 1; //getting the target choosen by the user
 		document.getElementById("openfile1").disabled = true;
+		}
 	}
 
 	document.getElementById("instId").onchange = function() {
