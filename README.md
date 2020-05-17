@@ -107,7 +107,7 @@ We have included three sample data sets that can help you to get started within 
   
 ### Miscellaneous
 * The tool uses localStorage of the browser to exchange data when utilizing the pruning tool. Selecting a large number of elements can exceed the quota and return an error. To prevent this, you can adjust the local storage quota of the web browser.
-* Adjunting the quota in firefox:
+* Adjusting the quota in firefox:
   * Go to about:config and search for "dom.storage.default_quota" and fill the value (in kilobytes).
   
 ## Citation
