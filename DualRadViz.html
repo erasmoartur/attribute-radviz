@@ -871,6 +871,7 @@
 	
 		if (targetAttr > -1){	// avoiding the click on the "choose here" option
 			loadingScreenOn(); //loading screen on
+			labelOut = [];  // reseting the list of removed labels
 			flagScreen = true;
 			document.getElementById("openfile1").disabled = true;
 		}
@@ -1311,7 +1312,7 @@
 				for (var m = 0; m < n; m++) { // percorrer dentre os adicionados
 					var a = contains.call(newList, attList[m]);
 					var b = contains.call(newList, attList[n]);
-					if ((maxValue < Math.abs(matrix[n][m])) && (((a && !b) || (!a && b)) || (newList[0] == null))) {
+					if ((maxValue <= Math.abs(matrix[n][m])) && (((a && !b) || (!a && b)) || (newList[0] == null))) {
 						maxValue = Math.abs(matrix[n][m]);
 						mMax = a ? m : n;
 						nMax = !a ? m : n;
@@ -1434,11 +1435,11 @@
 			var id = [];
 			idAttr = id_index; //Storing to the export option
 		
-		for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
-			regularData = regularData.filter(function(e) {
-				return e[label_index] !== labelOut[i]
-			});
-		};
+			for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
+				regularData = regularData.filter(function(e) {
+					return e[label_index] !== labelOut[i];
+				});
+			};
 
 
 			for (var i = 0; i < regularData.length; i++) {
@@ -1588,8 +1589,7 @@
 					dimensions: selDimensions,
 					angleTable: angleTable ? angleTable : [],
 				});
-
-
+				
 				regularRadviz.render(dataCopy, firstRun);
 			}
 
@@ -1753,12 +1753,18 @@
 
 	function removeLabel(label) {
 		labelOut.push(label);
+		updateRegularRadViz();
 	}
 
 	function refreshRadviz() {
 		if (seldim.length == 0)
 			seldim = alldim.slice(0, 3);
 		nextAtt(seldim);
+	}
+	
+	function updateRegularRadViz(){
+		firstRun = true;  //Forcing recomputing the regularData
+		sampleChange = true;				
 	}
 
 	function updateRadViz() {
