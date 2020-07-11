@@ -871,7 +871,7 @@
 	
 		if (targetAttr > -1){	// avoiding the click on the "choose here" option
 			loadingScreenOn(); //loading screen on
-			labelOut = [];  // reseting the list of removed labels
+			//labelOut = [];  // reseting the list of removed labels
 			flagScreen = true;
 			document.getElementById("openfile1").disabled = true;
 		}
@@ -1146,7 +1146,7 @@
 
 		for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
 			tData = tData.filter(function(e) {
-				return e[label_index] !== labelOut[i]
+				return e[labelOut[i][0]] !== labelOut[i][1];
 			});
 		}
 
@@ -1437,7 +1437,7 @@
 		
 			for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
 				regularData = regularData.filter(function(e) {
-					return e[label_index] !== labelOut[i];
+					return e[labelOut[i][0]] !== labelOut[i][1];
 				});
 			};
 
@@ -1492,12 +1492,6 @@
 				}
 				regularData = filteredData;
 				colors = newcolors;
-			}
-
-			for (var i = 0; i < labelOut.length; i++) { // removing unselected labels
-				regularData = regularData.filter(function(e) {
-					return e[label_index] !== labelOut[i]
-				});
 			}
 
 			alldim = dimensions_.slice();
@@ -1752,7 +1746,7 @@
 	}
 
 	function removeLabel(label) {
-		labelOut.push(label);
+		labelOut.push([lbIndex,label]);
 		updateRegularRadViz();
 	}
 
