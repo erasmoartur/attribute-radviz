@@ -1046,14 +1046,14 @@
 	//Saving the SVG to files
 	d3.select('#saveSvg').on('click', function() {	
 		if (d3.select('svg#rad')["_groups"][0][0] != null) {
-		  var config = {filename: 'customFileName',}
+		  var config = {filename: 'AttributeRadViz',}
 		  d3_save_svg.save(d3.select('svg#rad')["_groups"][0][0], config);
 		}
 	});
 	
 	d3.select('#saveRegSvg').on('click', function() {	
 		if (d3.select('svg#reg')["_groups"][0][0] != null) {
-		  var config = {filename: 'customFileName',}
+		  var config = {filename: 'RadViz',}
 		  d3_save_svg.save(d3.select('svg#reg')["_groups"][0][0], config);
 		}
 	});
